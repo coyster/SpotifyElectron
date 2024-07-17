@@ -4,6 +4,7 @@ Date utils
 
 from datetime import datetime
 
+date_format = "%Y-%m-%dT%H:%M:%S"
 
 def get_current_iso8601_date() -> str:
     """Get the current date in ISO8601 format
@@ -13,5 +14,5 @@ def get_current_iso8601_date() -> str:
         str: the ISO8601 current date
     """
     current_date = datetime.now()
-    date_iso8601 = current_date.strftime("%Y-%m-%dT%H:%M:%S")
+    date_iso8601 = current_date.strftime(date_format)
     return date_iso8601

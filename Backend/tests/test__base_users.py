@@ -143,7 +143,7 @@ def test_patch_playback_history_invalid_bad_user():
 
 
 def test_patch_playback_history_non_existing_user():
-    res_patch_user = patch_history_playback("usuario1", "cancion1", {})
+    res_patch_user = patch_history_playback("usuario1", "song1", {})
     assert res_patch_user.status_code == HTTP_403_FORBIDDEN
 
 
@@ -159,7 +159,7 @@ def test_patch_playback_history_user_correct_insert_6_songs(clear_test_data_db):
     file_path = "tests/assets/song.mp3"
     genre = "Pop"
 
-    new_song_name = "cancionnueva"
+    new_song_name = "songnueva"
 
     artista = "artista"
     res_create_artist = create_artist(name=artista, password=password, photo=photo)
@@ -542,7 +542,7 @@ def test_delete_playlist_from_owner_artist_correct(clear_test_data_db):
 def clear_test_data_db():
     name = "8232392323623823723"
     song_name = "8232392323623823723989"
-    new_song_name = "cancionnueva"
+    new_song_name = "songnueva"
     artista = "artista"
 
     delete_user(name=name)
@@ -553,7 +553,7 @@ def clear_test_data_db():
     yield
     name = "8232392323623823723"
     song_name = "8232392323623823723989"
-    new_song_name = "cancionnueva"
+    new_song_name = "songnueva"
     artista = "artista"
 
     delete_user(name=name)
