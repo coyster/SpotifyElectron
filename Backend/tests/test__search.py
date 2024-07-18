@@ -1,4 +1,3 @@
-import pytest
 from pytest import fixture
 from starlette.status import (
     HTTP_200_OK,
@@ -19,12 +18,22 @@ def set_up(trigger_app_startup):
 
 
 def test_get_search_by_name_correct(clear_test_data_db):
+    """
+    Feature: Search Functionality
+    Scenario: Search by items name
+    Given a user "user-name" with photo "https://photo" and password "password" exists
+    When I create the user
+    And create a playlist "playlist-name" with description "password" and photo "https://photo"
+    And search for the playlist by name "playlist-name"
+    Then I should receive a 200 OK status code
+    And the search result should contain the playlist "playlist-name"
+    """
     # TODO, crear los demas items y comprobarlos
-    name = "8232392323623823723"
+    name = "user-name"
     photo = "https://photo"
-    descripcion = "hola"
+    description = "password"
     password = "password"
-    playlist_name = "playlist"
+    playlist_name = "playlist-name"
 
     res_create_user = create_user(name, photo, password)
     assert res_create_user.status_code == HTTP_201_CREATED
@@ -33,13 +42,13 @@ def test_get_search_by_name_correct(clear_test_data_db):
 
     res_create_playlist = create_playlist(
         name=playlist_name,
-        descripcion=descripcion,
+        description=description,
         photo=photo,
         headers=jwt_headers,
     )
     assert res_create_playlist.status_code == HTTP_201_CREATED
 
-    res_search_by_name = get_search_by_name("playlist", jwt_headers)
+    res_search_by_name = get_search_by_name("playlist-name", jwt_headers)
     assert res_search_by_name.status_code == HTTP_200_OK
     assert res_search_by_name.json()["playlists"][0]["name"] == playlist_name
 
@@ -51,7 +60,7 @@ def test_get_search_by_name_correct(clear_test_data_db):
 
 
 def test_get_search_by_name_invalid_name(clear_test_data_db):
-    name = "8232392323623823723"
+    name = "user-name"
     photo = "https://photo"
     password = "password"
 
@@ -65,20 +74,3 @@ def test_get_search_by_name_invalid_name(clear_test_data_db):
 
     res_delete_user = delete_user(name)
     assert res_delete_user.status_code == HTTP_202_ACCEPTED
-
-
-# executes after all tests
-@pytest.fixture()
-def clear_test_data_db():
-    name = "8232392323623823723"
-    playlist_name = "playlist"
-
-    delete_user(name)
-    delete_playlist(playlist_name)
-
-    yield
-    name = "8232392323623823723"
-    playlist_name = "playlist"
-
-    delete_user(name)
-    delete_playlist(playlist_name)

@@ -46,7 +46,7 @@ def test_get_playlist_correct():
     jwt_headers = get_user_jwt_header(username=owner, password=password)
 
     res_create_playlist = create_playlist(
-        name=name, descripcion=descripcion, photo=photo, headers=jwt_headers
+        name=name, description=descripcion, photo=photo, headers=jwt_headers
     )
     assert res_create_playlist.status_code == HTTP_201_CREATED
 
@@ -105,7 +105,7 @@ def test_post_playlist_correct():
     jwt_headers = get_user_jwt_header(username=owner, password=password)
 
     res_create_playlist = create_playlist(
-        name=name, descripcion=descripcion, photo=photo, headers=jwt_headers
+        name=name, description=descripcion, photo=photo, headers=jwt_headers
     )
     assert res_create_playlist.status_code == HTTP_201_CREATED
 
@@ -129,7 +129,7 @@ def test_delete_playlist_correct():
     jwt_headers = get_user_jwt_header(username=owner, password=password)
 
     res_create_playlist = create_playlist(
-        name=name, descripcion=descripcion, photo=photo, headers=jwt_headers
+        name=name, description=descripcion, photo=photo, headers=jwt_headers
     )
     assert res_create_playlist.status_code == HTTP_201_CREATED
 
@@ -167,14 +167,14 @@ def test_update_playlist_correct():
     jwt_headers = get_user_jwt_header(username=owner, password=password)
 
     res_create_playlist = create_playlist(
-        name=name, descripcion=descripcion, photo=photo, headers=jwt_headers
+        name=name, description=descripcion, photo=photo, headers=jwt_headers
     )
     assert res_create_playlist.status_code == HTTP_201_CREATED
 
     new_description = "nuevadescripcion"
 
     res_update_playlist = update_playlist(
-        name=name, photo=photo, descripcion=new_description, headers=jwt_headers
+        name=name, photo=photo, description=new_description, headers=jwt_headers
     )
     assert res_update_playlist.status_code == HTTP_204_NO_CONTENT
 
@@ -208,7 +208,7 @@ def test_update_playlist_new_name_check_cascade_update_playlists_users_and_artis
     user_artist_headers = get_user_jwt_header(username=user_name, password=password)
 
     res_create_playlist = create_playlist(
-        name=name, descripcion=descripcion, photo=photo, headers=jwt_artist_headers
+        name=name, description=descripcion, photo=photo, headers=jwt_artist_headers
     )
     assert res_create_playlist.status_code == HTTP_201_CREATED
 
@@ -226,8 +226,8 @@ def test_update_playlist_new_name_check_cascade_update_playlists_users_and_artis
     res_update_playlist = update_playlist(
         name=name,
         photo=photo,
-        descripcion=new_description,
-        nuevo_nombre=new_name,
+        description=new_description,
+        new_name=new_name,
         headers=jwt_artist_headers,
     )
     assert res_update_playlist.status_code == HTTP_204_NO_CONTENT
@@ -260,7 +260,7 @@ def test_update_playlist_correct_new_name():
     jwt_headers = get_user_jwt_header(username=owner, password=password)
 
     res_create_playlist = create_playlist(
-        name=name, descripcion=descripcion, photo=photo, headers=jwt_headers
+        name=name, description=descripcion, photo=photo, headers=jwt_headers
     )
     assert res_create_playlist.status_code == HTTP_201_CREATED
 
@@ -270,8 +270,8 @@ def test_update_playlist_correct_new_name():
     res_update_playlist = update_playlist(
         name=name,
         photo=photo,
-        descripcion=new_description,
-        nuevo_nombre=new_name,
+        description=new_description,
+        new_name=new_name,
         headers=jwt_headers,
     )
     assert res_update_playlist.status_code == HTTP_204_NO_CONTENT
@@ -299,7 +299,7 @@ def test_get_playlists():
     jwt_headers = get_user_jwt_header(username=owner, password=password)
 
     res_create_playlist = create_playlist(
-        name=name, descripcion=descripcion, photo=photo, headers=jwt_headers
+        name=name, description=descripcion, photo=photo, headers=jwt_headers
     )
     assert res_create_playlist.status_code == HTTP_201_CREATED
 
@@ -308,7 +308,7 @@ def test_get_playlists():
     descripcion = "descripcion"
 
     res_create_playlist = create_playlist(
-        name=new_name, descripcion=descripcion, photo=photo, headers=jwt_headers
+        name=new_name, description=descripcion, photo=photo, headers=jwt_headers
     )
     assert res_create_playlist.status_code == HTTP_201_CREATED
 

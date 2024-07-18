@@ -29,7 +29,7 @@ def test_get_user_correct():
     Feature: User Management
     Scenario: Getting a user correctly
     Given a user with name "user-name" and photo "https://photo" and password "password" exists
-    When I create the user and get the JWT headers for the user
+    When I create the user
     Then I send a GET request to retrieve the user
     Then I should receive a 200 OK status code
     And the response JSON should contain the correct name and photo

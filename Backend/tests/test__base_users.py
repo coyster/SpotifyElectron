@@ -224,7 +224,7 @@ def test_patch_saved_playlist_user_correct(clear_test_data_db):
     jwt_headers_user = get_user_jwt_header(username=user_name, password=password)
 
     res_create_playlist = create_playlist(
-        name=playlist_name, descripcion=description, photo=photo, headers=jwt_headers_user
+        name=playlist_name, description=description, photo=photo, headers=jwt_headers_user
     )
     assert res_create_playlist.status_code == HTTP_201_CREATED
 
