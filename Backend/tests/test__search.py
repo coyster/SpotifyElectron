@@ -17,7 +17,7 @@ def set_up(trigger_app_startup):
     pass
 
 
-def test_get_search_by_name_correct(clear_test_data_db):
+def test_get_search_by_name_correct():
     """
     Feature: Search Functionality
     Scenario: Search by items name
@@ -59,7 +59,7 @@ def test_get_search_by_name_correct(clear_test_data_db):
     assert res_delete_user.status_code == HTTP_202_ACCEPTED
 
 
-def test_get_search_by_name_invalid_name(clear_test_data_db):
+def test_get_search_by_name_invalid_name():
     name = "user-name"
     photo = "https://photo"
     password = "password"

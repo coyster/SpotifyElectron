@@ -101,6 +101,9 @@ def test_create_song_as_user():
     )
     assert res_create_song.status_code == HTTP_403_FORBIDDEN
 
+    res_delete_artist = delete_user(user_name)
+    assert res_delete_artist.status_code == HTTP_202_ACCEPTED
+
 
 def test_create_song_correct_check_valid_duration():
     """
@@ -226,7 +229,7 @@ def test_get_song_correct():
     res_get_song = get_song(name=song_name, headers=jwt_headers)
     assert res_get_song.status_code == HTTP_200_OK
     assert res_get_song.json()["name"] == song_name
-    assert res_get_song.json()["artist-name"] == artist_name
+    assert res_get_song.json()["artist"] == artist_name
     assert res_get_song.json()["genre"] == Genre(genre)
     assert res_get_song.json()["photo"] == photo
 
@@ -388,6 +391,9 @@ def test_patch_number_of_plays_song_not_found():
     res_increase_streams_song = increase_song_streams(name=song_name, headers=jwt_headers)
     assert res_increase_streams_song.status_code == HTTP_404_NOT_FOUND
 
+    res_delete_artist = delete_user(artist)
+    assert res_delete_artist.status_code == HTTP_202_ACCEPTED
+
 
 def test_patch_song_invalid_name():
     """
@@ -414,6 +420,9 @@ def test_patch_song_invalid_name():
 
     res_increase_streams_song = increase_song_streams(name=song_name, headers=jwt_headers)
     assert res_increase_streams_song.status_code == HTTP_404_NOT_FOUND
+
+    res_delete_artist = delete_user(artist)
+    assert res_delete_artist.status_code == HTTP_202_ACCEPTED
 
 
 def test_post_song_uploaded_songs_updated():
