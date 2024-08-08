@@ -14,7 +14,12 @@ In this section we will cover:
 cd Backend
 ```
 
-### 2. Rename `.env.local` to `.env` for development or create the enviroment file in root path with the following data. More on enviroments [here](Enviroment.md). A development-ready `.env` file is also provided in the document.
+### 2. Rename `.env.local` to `.env` for development or create an enviroment file in root path
+
+* More on enviroments [here](Enviroment.md).
+* A development-ready `.env` file is also provided in the document.
+
+The enviroment variables are the following:
 
 ```
 * MONGO_URI= uri for connecting into a MongoDB database ( mongodb://root:root@localhost:27017/ )
@@ -27,7 +32,7 @@ cd Backend
 
 ### 3. Install the virtual enviroment and dependencies
 
-**Windows**
+🪟 **Windows**
 ```
 python -m venv venv;
 venv/Scripts/activate;
@@ -37,7 +42,7 @@ pip install -r requirements-test.txt;
 
 ```
 
-**Linux**
+🐧 **Linux**
 ```
 python3.11 -m venv venv &&
 source venv/bin/activate &&
@@ -45,17 +50,16 @@ pip install -r requirements.txt &&
 pip install -r requirements-dev.txt &&
 pip install -r requirements-test.txt
 ```
-There's also a script `install-all-requirements.sh` that creates a virtual enviroment and install all dependencies included.
-Just make sure to activate the virtual enviroment after running the script.
+There's included a script `install-all-requirements.sh` that install all dependencies from a given directory in an already create virtual enviroment (Folder has to be named `venv`). Works both for Windows and Linux.
 
 
-### 4. Run the app in hot reload debug mode, launcht the provided vscode script or run:
+### 4. Run the app in hot reload debug mode, launch the provided vscode script [**DEBUG Backend app**] or run:
 
 ```
 python -m app
 ```
 
-### 5. The app will be deploy at **[http://127.0.0.1:8000/](http://127.0.0.1:8000/)**. API docs will be at **[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)**
+### 5. The app will be deploy at **[http://127.0.0.1:8000/](http://127.0.0.1:8000/)**. API docs will be placed at **[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)**
 
 ## 🐳 Docker deployment
 

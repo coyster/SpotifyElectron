@@ -6,13 +6,10 @@ Provider class for supplying song collection connection with database depending 
 from gridfs import GridFS
 from pymongo.collection import Collection
 
+from app.common.app_schema import AppArchitecture, AppEnviroment
 from app.common.PropertiesManager import PropertiesManager
-from app.common.set_up_constants import (
-    ARCH_BLOB,
-    ARCH_STREAMING_SERVERLESS_FUNCTION,
-    ARCHITECTURE_ENV_NAME,
-)
-from app.database.Database import Database, DatabaseCollection
+from app.database.database_connection_provider import DatabaseConnection
+from app.database.database_schema import DatabaseCollection
 
 
 def get_song_collection() -> Collection:
@@ -22,12 +19,16 @@ def get_song_collection() -> Collection:
         Collection: the song collection depending on architecture
     """
     repository_map = {
-        ARCH_BLOB: Database().get_collection_connection(DatabaseCollection.SONG_BLOB_FILE),
-        ARCH_STREAMING_SERVERLESS_FUNCTION: Database().get_collection_connection(
+        AppArchitecture.ARCH_BLOB: DatabaseConnection.connection_instance.get_collection_connection(  # noqa: E501
+            DatabaseCollection.SONG_BLOB_FILE
+        ),
+        AppArchitecture.ARCH_STREAMING_SERVERLESS_FUNCTION: DatabaseConnection.connection_instance.get_collection_connection(  # noqa: E501
             DatabaseCollection.SONG_STREAMING
         ),
     }
-    return repository_map.get(PropertiesManager.__getattribute__(ARCHITECTURE_ENV_NAME))  # type: ignore
+    return repository_map.get(
+        PropertiesManager.__getattribute__(AppEnviroment.ARCHITECTURE_ENV_NAME)
+    )  # type: ignore
 
 
 def get_gridfs_song_collection() -> GridFS:
@@ -35,4 +36,6 @@ def get_gridfs_song_collection() -> GridFS:
 
     :return GridFS: the gridfs song collection
     """
-    return Database().get_gridfs_collection_connection(DatabaseCollection.SONG_BLOB_DATA)
+    return DatabaseConnection.connection_instance.get_gridfs_collection_connection(
+        DatabaseCollection.SONG_BLOB_DATA
+    )
