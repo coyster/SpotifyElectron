@@ -9,6 +9,8 @@ import sys
 from app.common.app_schema import AppConfig
 from app.logging.logging_constants import DEBUG, INFO
 from app.logging.LogPropertiesManager import LogPropertiesManager
+from asgi_correlation_id import CorrelationIdMiddleware
+from asgi_correlation_id.log_filters import CorrelationIdFilter
 
 
 class SpotifyElectronFormatter(logging.Formatter):
@@ -25,13 +27,13 @@ class SpotifyElectronFormatter(logging.Formatter):
             f"%(asctime)s -  {MODULE_COLOR}%(name)s{RESET_COLOR} - {LEVEL_DEBUG_COLOR}%(levelname)s{RESET_COLOR} - %(message)s"  # noqa: E501
         ),
         logging.INFO: (
-            f"%(asctime)s -  {MODULE_COLOR}%(name)s{RESET_COLOR} - {LEVEL_INFO_COLOR}%(levelname)s{RESET_COLOR} - %(message)s"  # noqa: E501
+            f"[%(correlation_id)s] %(asctime)s -  {MODULE_COLOR}%(name)s{RESET_COLOR} - {LEVEL_INFO_COLOR}%(levelname)s{RESET_COLOR} - %(message)s"  # noqa: E501
         ),
         logging.WARNING: (
             f"%(asctime)s -  {MODULE_COLOR}%(name)s{RESET_COLOR} - {LEVEL_WARNING_COLOR}%(levelname)s{RESET_COLOR} - %(message)s"  # noqa: E501
         ),
         logging.ERROR: (
-            f"%(asctime)s -  {MODULE_COLOR}%(name)s{RESET_COLOR} - {LEVEL_ERROR_COLOR}%(levelname)s{RESET_COLOR} - %(message)s"  # noqa: E501
+            f"[%(correlation_id)s] %(asctime)s -  {MODULE_COLOR}%(name)s{RESET_COLOR} - {LEVEL_ERROR_COLOR}%(levelname)s{RESET_COLOR} - %(message)s"  # noqa: E501
         ),
         logging.CRITICAL: (
             f"%(asctime)s -  {MODULE_COLOR}%(name)s{RESET_COLOR} - {LEVEL_CRITICAL_COLOR}%(levelname)s{RESET_COLOR} - %(message)s"  # noqa: E501
@@ -71,10 +73,11 @@ class SpotifyElectronLogger:
         self._log_level_mapping = {INFO: logging.INFO, DEBUG: logging.DEBUG}
 
         self.logger = logging.getLogger(logger_name)
-
+        cid_filter = CorrelationIdFilter(uuid_length=32)
         self.logger.setLevel(self._get_log_level())
         self._manage_file_handler()
         self._manage_console_handler()
+        self.logger.addFilter(cid_filter)
 
     def _manage_file_handler(self) -> None:
         """Adds logging handler depending if log file has been provided or not"""
@@ -109,7 +112,9 @@ class SpotifyElectronLogger:
 
     def _get_log_level(self) -> int:
         try:
-            log_level = self.log_properties_manager.__getattribute__(AppConfig.LOG_INI_LEVEL)
+            log_level = self.log_properties_manager.__getattribute__(
+                AppConfig.LOG_INI_LEVEL
+            )
             if log_level is None:
                 return logging.INFO
             mapped_log_level = self._log_level_mapping[log_level]

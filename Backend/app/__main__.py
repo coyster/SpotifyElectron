@@ -10,23 +10,18 @@ FastAPI APP entrypoint
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from typing import Any
+from uuid import uuid4
 
 import uvicorn
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
 from app.common.app_schema import AppConfig, AppEnvironment, AppInfo
 from app.common.PropertiesManager import PropertiesManager
 from app.database.DatabaseConnectionManager import DatabaseConnectionManager
 from app.logging.logging_constants import LOGGING_MAIN
 from app.logging.logging_schema import SpotifyElectronLogger
-from app.middleware.cors_middleware_config import (
-    allow_credentials,
-    allowed_headers,
-    allowed_methods,
-    allowed_origins,
-    max_age,
-)
+from app.middleware.cors_middleware_config import (allow_credentials,
+                                                   allowed_headers,
+                                                   allowed_methods,
+                                                   allowed_origins, max_age)
 from app.spotify_electron.genre import genre_controller
 from app.spotify_electron.health import health_controller
 from app.spotify_electron.login import login_controller
@@ -36,6 +31,10 @@ from app.spotify_electron.song import song_controller
 from app.spotify_electron.song.providers.song_service_provider import SongServiceProvider
 from app.spotify_electron.user import user_controller
 from app.spotify_electron.user.artist import artist_controller
+from asgi_correlation_id import CorrelationIdMiddleware
+from asgi_correlation_id.middleware import is_valid_uuid4
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 main_logger = SpotifyElectronLogger(LOGGING_MAIN).getLogger()
 
@@ -94,6 +93,16 @@ app.add_middleware(
     allow_headers=allowed_headers,
 )
 
+app.add_middleware(
+    CorrelationIdMiddleware,
+    header_name="X-Request-ID",
+    update_request_header=True,
+    generator=lambda: uuid4().hex,
+    validator=is_valid_uuid4,
+    transformer=lambda a: a,
+)
+
+
 if __name__ == "__main__":
     uvicorn.run(
         app=PropertiesManager.__getattribute__(AppConfig.APP_INI_KEY),
@@ -101,3 +110,4 @@ if __name__ == "__main__":
         port=int(PropertiesManager.__getattribute__(AppConfig.PORT_INI_KEY)),
         reload=PropertiesManager.is_development_environment(),
     )
+    
