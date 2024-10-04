@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from typing import Any
 
 from app.exceptions.base_exceptions_schema import SpotifyElectronException
+from app.logging.logging_constants import LOGGING_PLAYLIST_SERVICE
+from app.logging.logging_schema import SpotifyElectronLogger
 
 
 @dataclass
@@ -88,7 +90,16 @@ class PlaylistNotFoundException(SpotifyElectronException):
 
     ERROR = "Playlist not found"
 
-    def __init__(self):
+    # logger.error(f"{ERROR} ")
+
+    def __init__(self, playlist_name):
+        self.playlist_name = playlist_name
+        self.message = f"Playlist '{playlist_name}' not found."
+        self.log = (
+            SpotifyElectronLogger(LOGGING_PLAYLIST_SERVICE)
+            .getLogger()
+            .error(self.message)
+        )
         super().__init__(self.ERROR)
 
 

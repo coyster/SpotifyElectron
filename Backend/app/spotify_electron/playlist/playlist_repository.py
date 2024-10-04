@@ -84,7 +84,7 @@ def get_playlist(
         playlist_dao = get_playlist_dao_from_document(playlist)  # type: ignore
 
     except PlaylistNotFoundException as exception:
-        raise PlaylistNotFoundException from exception
+        raise PlaylistNotFoundException(name) from exception
 
     except Exception as exception:
         playlist_repository_logger.exception(f"Error getting Playlist {name} from database")

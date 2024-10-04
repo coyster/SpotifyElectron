@@ -43,7 +43,7 @@ def validate_playlist_should_exists(name: str) -> None:
 
     """
     if not check_playlist_exists(name):
-        raise PlaylistNotFoundException
+        raise PlaylistNotFoundException(name)
 
 
 def validate_playlist_should_not_exists(name: str) -> None:

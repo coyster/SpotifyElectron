@@ -74,7 +74,7 @@ def get_playlist(name: str) -> PlaylistDTO:
         raise PlaylistBadNameException from exception
     except PlaylistNotFoundException as exception:
         playlist_service_logger.exception(f"Playlist not found: {name}")
-        raise PlaylistNotFoundException from exception
+        raise PlaylistNotFoundException(name) from exception
     except PlaylistRepositoryException as exception:
         playlist_service_logger.exception(
             f"Unexpected error in Playlist Repository getting playlist: {name}"
@@ -209,7 +209,7 @@ def update_playlist(  # noqa: PLR0913
         raise PlaylistBadNameException from exception
     except PlaylistNotFoundException as exception:
         playlist_service_logger.exception(f"Playlist not found: {name}")
-        raise PlaylistNotFoundException from exception
+        raise PlaylistNotFoundException(name) from exception
     except UserUnauthorizedException as exception:
         playlist_service_logger.exception(f"User is not the owner of playlist: {name}")
         raise UserUnauthorizedException from exception
@@ -251,7 +251,7 @@ def delete_playlist(name: str) -> None:
         raise PlaylistBadNameException from exception
     except PlaylistNotFoundException as exception:
         playlist_service_logger.exception(f"Playlist not found: {name}")
-        raise PlaylistNotFoundException from exception
+        raise PlaylistNotFoundException(name) from exception
     except UserNotFoundException as exception:
         playlist_service_logger.exception(f"User owner of the playlist {name} not found")
         raise UserNotFoundException from exception

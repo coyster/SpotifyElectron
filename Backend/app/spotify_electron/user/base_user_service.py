@@ -254,7 +254,7 @@ def add_saved_playlist(user_name: str, playlist_name: str, token: TokenData) -> 
         raise UserUnauthorizedException from exception
     except PlaylistNotFoundException as exception:
         base_users_service_logger.exception(f"Playlist not found: {playlist_name}")
-        raise PlaylistNotFoundException from exception
+        raise PlaylistNotFoundException(playlist_name) from exception
     except UserRepositoryException as exception:
         base_users_service_logger.exception(
             f"Unexpected error in User Repository adding playlist {playlist_name} "
@@ -313,7 +313,7 @@ def delete_saved_playlist(user_name: str, playlist_name: str, token: TokenData) 
         raise UserUnauthorizedException from exception
     except PlaylistNotFoundException as exception:
         base_users_service_logger.exception(f"Playlist not found: {playlist_name}")
-        raise PlaylistNotFoundException from exception
+        raise PlaylistNotFoundException(playlist_name) from exception
     except UserRepositoryException as exception:
         base_users_service_logger.exception(
             f"Unexpected error in User Repository deleting playlist {playlist_name} "
